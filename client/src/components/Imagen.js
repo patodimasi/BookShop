@@ -56,6 +56,7 @@ export const Imagen = forwardRef(function Imagen(props, ref) {
 
     const onTemplateRemove = (file, callback) => {
         setTotalSize(totalSize - file.size);
+        ref.current.clear();
         callback();
     };
 

@@ -80,7 +80,6 @@ export const FileTable = ( data ) => {
     const [errorInputs, setErrorInputs] = useState(emptyErrorInput);
     const [productIsbn, setProductIsbn] = useState();
 
-    // Estado para pasar nombre del archivo
     const [fileImagen, setFileImagen] = useState('');
 
     const toast = useRef(null);
@@ -98,7 +97,6 @@ export const FileTable = ( data ) => {
 
     const crearArchivo = (name) =>{
         let archObj = {};
-
         if ( name != '' ){
             archObj = {
                 objectURL: process.env.REACT_APP_API + "/images/" + name,
@@ -114,17 +112,17 @@ export const FileTable = ( data ) => {
     const handleChildTextChange = (newText) => {    
         console.log("ontext change de la imagen, argumento: ", newText);
         if(dialogType == 'add'){
+            const newTextSP = newText.replace(/\s/g, '_');
             let _product = { ...product };
-            _product.imagen = newText;
-            console.log("_product" , _product)
+            _product.imagen = newTextSP;
             setProduct(_product);
         }
         else{
+            const newTextSP = newText.replace(/\s/g, '_');
             let _modifiedProduct = {...modifiedProduct};
-            _modifiedProduct.imagen = newText;
+            _modifiedProduct.imagen = newTextSP;
             setModifiedProduct(_modifiedProduct);
-        }
-    
+        }  
     };
 
     const rowExpansionTemplate = (data) => {
@@ -381,6 +379,7 @@ export const FileTable = ( data ) => {
         {
             result = validarCamposVacios(modifiedProduct);
             if(result){
+                ref.current.upload();
                 let resultadoPut = await putData(modifiedProduct);
                
                 if(resultadoPut.message == 'SERVER: Repetido'){
@@ -566,6 +565,7 @@ export const FileTable = ( data ) => {
                             Image
                         </label>
                            <Imagen ref={ref} onTextChange={handleChildTextChange} fileProd = {(dialogType === 'add') ? null : crearArchivo(modifiedProduct.imagen)}  />
+                         
                     </div>
                 </div> 
 
